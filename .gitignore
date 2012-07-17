@@ -1,0 +1,13 @@
+# for gradle
+.gradle/
+build/
+
+# for java/groovy
+*.class
+
+# for idea
+*.ipr
+*.iml
+*.iws
+out/
+

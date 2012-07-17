@@ -1,0 +1,21 @@
+apply plugin : 'groovy'
+apply plugin : 'idea'
+
+group = 'org.mikeneck.gradle.git'
+version = '1.0'
+
+def jdkLevel = 1.6
+
+sourceCompatibility = jdkLevel
+targetCompatibility = jdkLevel
+
+repositories {
+    mavenCentral ()
+}
+
+dependencies {
+    groovy fileTree(dir: new File(gradle.gradleHomeDir, 'lib'), includes: ['**/groovy-all-*.jar'])
+    compile gradleApi()
+    testCompile 'junit:junit:4.+'
+}
+
