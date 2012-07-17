@@ -4,5 +4,7 @@ buildscript {
     }
 }
 
-apply plugin : 'gitignore'
+if (new File("../core/build/libs/gradle-git-ignore-${project.properties['version']}.jar").exists()) {
+    apply plugin : 'git-ignore'
+}
 
