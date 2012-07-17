@@ -14,7 +14,16 @@ allprojects {
     }
 
     dependencies {
-        testCompile 'junit:junit:4.+'
+        testCompile ('junit:junit-dep:4.+') {
+            exclude module : 'hamcrest'
+            exclude module : 'hamcrest-core'
+        }
+        testCompile 'org.hamcrest:hamcrest-library:1.2.1'
+        testCompile 'org.easymock:easymock:3.1'
+        testCompile 'org.powermock:powermock-api-easymock:1.4.12'
+        testCompile ('org.powermock:powermock-module-junit4:1.4.12') {
+            exclude module : 'junit'
+        }
     }
 
 }
