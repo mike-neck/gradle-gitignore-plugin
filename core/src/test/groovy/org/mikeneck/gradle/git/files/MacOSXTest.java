@@ -10,6 +10,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.List;
 
 import static org.easymock.EasyMock.expect;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertThat;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -26,21 +27,40 @@ public class MacOSXTest {
 
     @Test
     public void macOSX () {
-        mockStatic(System.class);
-        PluginContainer container = createMock(PluginContainer.class);
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            mockStatic(System.class);
+            PluginContainer container = createMock(PluginContainer.class);
 
-        expect(System.getProperty("os.name")).andReturn("Mac OS X");
-        expect(container.hasPlugin("java")).andReturn(true);
+            expect(System.getProperty("os.name")).andReturn("Mac OS X");
+            expect(container.hasPlugin("java")).andReturn(true);
 
-        replay(System.class, container);
+            replay(System.class, container);
 
-        IgnoreFiles ignoreFiles = MacOSX.git(container);
+            IgnoreFiles ignoreFiles = MacOSX.git(container);
 
-        List<String> files = ignoreFiles.getIgnoreFiles();
-        assertThat(".DS_Store", isIn(files));
-        assertThat("._*", isIn(files));
-        assertThat(".Spotlight-V100", isIn(files));
-        assertThat(".Trashes", isIn(files));
+            List<String> files = ignoreFiles.getIgnoreFiles();
+            assertThat(".DS_Store", isIn(files));
+            assertThat("._*", isIn(files));
+            assertThat(".Spotlight-V100", isIn(files));
+            assertThat(".Trashes", isIn(files));
+        }
     }
 
+    @Test
+    public void windows () {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            mockStatic(System.class);
+            PluginContainer container = createMock(PluginContainer.class);
+
+            expect(System.getProperty("os.name")).andReturn("Windows");
+            expect(container.hasPlugin("java")).andReturn(true);
+
+            replay(System.class, container);
+
+            IgnoreFiles ignoreFiles = MacOSX.git(container);
+
+            List<String> files = ignoreFiles.getIgnoreFiles();
+            assertThat(files.size(), is(0));
+        }
+    }
 }
