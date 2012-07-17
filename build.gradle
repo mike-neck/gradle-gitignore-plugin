@@ -19,3 +19,12 @@ dependencies {
     testCompile 'junit:junit:4.+'
 }
 
+idea.project.ipr {
+    withXml { provider ->
+        def map = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+        map.@vcs = 'Git'
+        map.@directory = project.properties.projectDir
+
+    }
+}
+
