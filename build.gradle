@@ -3,7 +3,7 @@ allprojects {
     apply plugin : 'idea'
 
     group = 'org.mikeneck.gradle.git'
-    version = '1.0'
+    version = '0.1'
 
     def jdkLevel = 1.6
     sourceCompatibility = jdkLevel
@@ -31,7 +31,6 @@ idea.project.ipr {
         def map = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
         map.@vcs = 'Git'
         map.@directory = project.properties.projectDir
-
     }
 }
 
