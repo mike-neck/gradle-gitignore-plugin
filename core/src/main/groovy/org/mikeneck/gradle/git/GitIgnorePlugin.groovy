@@ -2,6 +2,7 @@ package org.mikeneck.gradle.git
 
 import org.gradle.api.Project
 import org.gradle.api.Plugin
+import org.gradle.api.plugins.PluginContainer
 
 /**
  * git-ignore task
@@ -10,13 +11,12 @@ import org.gradle.api.Plugin
  */
 class GitIgnorePlugin implements Plugin<Project> {
 
+    private static final String GIT_IGNORE = '.gitignore'
+
     @Override
     void apply(Project project) {
+
         project.task('git-ignore').doLast {
-            println "java    : ${project.plugins.hasPlugin('java')}"
-            println "groovy  : ${project.plugins.hasPlugin('groovy')}"
-            println "eclipse : ${project.plugins.hasPlugin('eclipse')}"
-            println "idea    : ${project.plugins.hasPlugin('idea')}"
         }
     }
 }
