@@ -4,6 +4,7 @@ import org.gradle.api.plugins.PluginContainer;
 import org.mikeneck.gradle.git.IgnoreFiles;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,8 +12,14 @@ import java.util.List;
  */
 abstract public class Eclipse implements IgnoreFiles {
 
+    private static final String ECLIPSE = "eclipse";
+
     public static IgnoreFiles git(PluginContainer container) {
-        return new HasEclipse();
+        if (container.hasPlugin(ECLIPSE)) {
+            return new HasEclipse();
+        } else {
+            return new NoEclipse();
+        }
     }
 
     private static class HasEclipse extends Eclipse {
@@ -27,6 +34,13 @@ abstract public class Eclipse implements IgnoreFiles {
         @Override
         public List<String> getIgnoreFiles() {
             return LIST;
+        }
+    }
+
+    private static class NoEclipse extends Eclipse {
+        @Override
+        public List<String> getIgnoreFiles() {
+            return Collections.emptyList();
         }
     }
 }

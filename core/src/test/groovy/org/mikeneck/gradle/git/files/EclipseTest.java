@@ -9,6 +9,7 @@ import java.util.List;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertThat;
 
@@ -45,5 +46,18 @@ public class EclipseTest {
         assertThat("*.launch", isIn(files));
         assertThat(".cproject", isIn(files));
         assertThat(".buildpath", isIn(files));
+    }
+
+    @Test
+    public void notEclipse () {
+        PluginContainer container = createMock(PluginContainer.class);
+        expect(container.hasPlugin("eclipse")).andReturn(false);
+
+        replay(container);
+
+        IgnoreFiles ignoreFiles = Eclipse.git(container);
+        List<String> files = ignoreFiles.getIgnoreFiles();
+
+        assertThat(files.size(), is(0));
     }
 }
