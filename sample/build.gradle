@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath files ('../core/build/libs/gradle-git-ignore-1.0.jar')
+        classpath files ("../core/build/libs/gradle-git-ignore-${project.properties['version']}.jar")
     }
 }
 
