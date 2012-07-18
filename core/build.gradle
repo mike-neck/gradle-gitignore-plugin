@@ -1,2 +1,17 @@
 archivesBaseName = 'gradle-git-ignore'
 
+repositories {
+    mavenCentral ()
+}
+
+dependencies {
+    testCompile ('org.spockframework:spock-core:0.6-groovy-1.8') {
+        exclude module : 'groovy-all'
+        exclude module : 'junit-dep'
+        exclude module : 'hamcrest-core'
+        exclude module : 'ant'
+        exclude module : 'asm'
+        exclude module : 'cglib-nodep'
+        exclude module : 'objenesis'
+    }
+}
