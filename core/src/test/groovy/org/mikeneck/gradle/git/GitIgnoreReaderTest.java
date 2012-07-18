@@ -18,15 +18,26 @@ import static org.junit.Assert.fail;
  */
 public class GitIgnoreReaderTest {
 
-    private static URL TEST_PROJECT = GitIgnoreReaderTest.class.getClassLoader().getResource("test/");
-
     private GitIgnoreFile ignoreFile;
+
     private GitIgnoreReader reader;
+
+    private static String SRC_TEST_RECOURCES_TEST = "src/test/resources/test";
+
+    private static String CORE_SRC_TEST_RECOUREC_TEST = "core/src/test/resources/test";
 
     @Before
     public void setup () {
+        String file;
+        if (new File(CORE_SRC_TEST_RECOUREC_TEST).exists()) {
+            file = CORE_SRC_TEST_RECOUREC_TEST;
+        } else {
+            file = SRC_TEST_RECOURCES_TEST;
+        }
+
         ignoreFile = new GitIgnoreFile();
-        ignoreFile.setProjectHome(new File(TEST_PROJECT.getFile()));
+        ignoreFile.setProjectHome(new File(file));
+
         reader = new GitIgnoreReader();
         reader.setFile(ignoreFile);
         reader.load();
