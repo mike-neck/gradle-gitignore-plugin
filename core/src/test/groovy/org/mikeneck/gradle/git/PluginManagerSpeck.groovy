@@ -23,7 +23,7 @@ class PluginManagerSpeck extends Specification {
     static final String WINDOWS = 'Windows'
 
     def 'windows case plugin manager returns plugins 6 and assert its values' () {
-        setup: 'prepare properties'
+        setup: 'windows/ eclipse/ idea/ java'
         useWindows()
         def container = createMock(PluginContainer)
         expect(container.hasPlugin('eclipse')).andReturn(true)
@@ -31,7 +31,7 @@ class PluginManagerSpeck extends Specification {
         expect(container.hasPlugin('java')).andReturn(true)
         replay(container)
 
-        when: "all plugin are used"
+        when: "operation"
         def manager = new PluginManager(container: container)
         def ignoreFiles = manager.manage()
 
@@ -49,7 +49,7 @@ class PluginManagerSpeck extends Specification {
     }
 
     def 'in mac os x case with idea only' () {
-        setup: 'prepare properties'
+        setup: 'mac/ idea/ java'
         useMac()
         def container = createMock(PluginContainer)
         expect(container.hasPlugin('eclipse')).andReturn(false)
@@ -57,7 +57,7 @@ class PluginManagerSpeck extends Specification {
         expect(container.hasPlugin('java')).andReturn(true)
         replay(container)
 
-        when: "all plugin are used"
+        when: "operation"
         def manager = new PluginManager(container: container)
         def ignoreFiles = manager.manage()
 
@@ -75,7 +75,7 @@ class PluginManagerSpeck extends Specification {
     }
 
     def 'windows with full plugin case counts ignore files' () {
-        setup: 'prepare properties'
+        setup: 'windows/ eclipse/ idea/ java'
         useWindows()
         def container = createMock(PluginContainer)
         expect(container.hasPlugin('eclipse')).andReturn(true)
@@ -83,7 +83,7 @@ class PluginManagerSpeck extends Specification {
         expect(container.hasPlugin('java')).andReturn(true)
         replay(container)
 
-        when: "all plugin are used"
+        when: "operation"
         def manager = new PluginManager(container: container)
         def files = manager.loadIgnoreFiles()
 
@@ -95,7 +95,7 @@ class PluginManagerSpeck extends Specification {
     }
 
     def 'mac os x with eclipse plugin case counts ignore files' () {
-        setup: 'prepare properties'
+        setup: 'mac/ eclipse/ java'
         useMac()
         def container = createMock(PluginContainer)
         expect(container.hasPlugin('eclipse')).andReturn(true)
@@ -103,7 +103,7 @@ class PluginManagerSpeck extends Specification {
         expect(container.hasPlugin('java')).andReturn(true)
         replay(container)
 
-        when: "all plugin are used"
+        when: "operation"
         def manager = new PluginManager(container: container)
         def files = manager.loadIgnoreFiles()
 
@@ -115,7 +115,7 @@ class PluginManagerSpeck extends Specification {
     }
 
     def 'mac os x with all plugin case files detail' () {
-        setup: 'prepare properties'
+        setup: 'mac/ eclipse/ idea/ java'
         useMac()
         def container = createMock(PluginContainer)
         expect(container.hasPlugin('eclipse')).andReturn(true)
@@ -123,11 +123,11 @@ class PluginManagerSpeck extends Specification {
         expect(container.hasPlugin('java')).andReturn(true)
         replay(container)
 
-        when: "all plugin are used"
+        when: "operation"
         def manager = new PluginManager(container: container)
         def files = manager.loadIgnoreFiles()
 
-        then: "count ignore files"
+        then: "assertion files in detail"
         '.DS_Store' in files
         '.classpath' in files
         'out/' in files
@@ -140,7 +140,7 @@ class PluginManagerSpeck extends Specification {
     }
 
     def 'windows with eclipse plugin case files detail' () {
-        setup: 'prepare properties'
+        setup: 'windows/ idea/ java'
         useWindows()
         def container = createMock(PluginContainer)
         expect(container.hasPlugin('eclipse')).andReturn(true)
@@ -148,11 +148,11 @@ class PluginManagerSpeck extends Specification {
         expect(container.hasPlugin('java')).andReturn(true)
         replay(container)
 
-        when: "all plugin are used"
+        when: "operation"
         def manager = new PluginManager(container: container)
         def files = manager.loadIgnoreFiles()
 
-        then: "count ignore files"
+        then: "assertion files in detail"
         !('.DS_Store' in files)
         'Thumbs.db' in files
         '.classpath' in files
