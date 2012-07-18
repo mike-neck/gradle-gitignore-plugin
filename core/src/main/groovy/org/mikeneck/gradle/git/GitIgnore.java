@@ -4,6 +4,7 @@ import groovy.lang.Closure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,21 +19,26 @@ import java.util.List;
  * </code></pre>
  * @author mike
  */
-public class GitIgnore {
+public class GitIgnore implements ForceIgnore {
 
     public static final String extension = "gitignore";
 
-    public List<String> files = new ArrayList<String>();
+    public List<String> ignoreFiles = new ArrayList<String>();
 
     public void files (String... items) {
-        files = Arrays.asList(items);
+        ignoreFiles = Arrays.asList(items);
     }
 
     public void files (List<String> items) {
-        files = items;
+        ignoreFiles = items;
     }
 
     public void files (Closure<List<String>> closure) {
-        files = closure.call();
+        ignoreFiles = closure.call();
+    }
+
+    @Override
+    public List<String> getFiles() {
+        return Collections.unmodifiableList(ignoreFiles);
     }
 }

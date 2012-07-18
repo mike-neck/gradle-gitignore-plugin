@@ -11,11 +11,12 @@ import org.mikeneck.gradle.git.files.Java
 /**
  * @author mike_neck
  */
-class PluginManager {
+class PluginManager implements Plugins {
 
     PluginContainer container
 
-    List<String> loadIgnoreFiles () {
+    @Override
+    public List<String> loadIgnoreFiles () {
         List<IgnoreFiles> list = manage()
         return list.collect {
             it.ignoreFiles }.flatten().asList()
