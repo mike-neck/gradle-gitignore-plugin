@@ -11,6 +11,7 @@ import java.util.Map;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @author mike
@@ -48,5 +49,22 @@ public class GitIgnoreReaderTest {
         assertThat("*.class", isIn(contents));
         assertThat("test/", isIn(contents));
         assertThat("!.gitignore", isIn(contents));
+    }
+
+    @Test
+    public void anOrderIsSaved () {
+        List<String> list = reader.readContents();
+        int iterator = 0;
+
+        for (int size = list.size();
+             iterator < size && "test/".equals(list.get(iterator)) == false;) {
+            iterator += 1;
+        }
+
+        if (iterator == list.size()) {
+            fail();
+        } else {
+            assertThat(list.get(iterator + 1), is("!.gitignore"));
+        }
     }
 }
