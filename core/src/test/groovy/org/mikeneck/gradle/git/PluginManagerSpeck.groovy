@@ -24,33 +24,33 @@ class PluginManagerSpeck extends Specification {
 
     def 'windows case plugin manager returns plugins 6 and assert its values' () {
         setup: 'prepare properties'
-            useWindows()
-            def container = createMock(PluginContainer)
-            expect(container.hasPlugin('eclipse')).andReturn(true)
-            expect(container.hasPlugin('idea')).andReturn(true)
-            expect(container.hasPlugin('java')).andReturn(true)
-            replay(container)
+        useWindows()
+        def container = createMock(PluginContainer)
+        expect(container.hasPlugin('eclipse')).andReturn(true)
+        expect(container.hasPlugin('idea')).andReturn(true)
+        expect(container.hasPlugin('java')).andReturn(true)
+        replay(container)
 
         when: "all plugin are used"
-            def manager = new PluginManager(container: container)
-            def ignoreFiles = manager.manage()
+        def manager = new PluginManager(container: container)
+        def ignoreFiles = manager.manage()
 
         then: "count plugins"
-            ignoreFiles.size() == 6
-            ignoreFiles[0].ignoreFiles.size() == 18
-            ignoreFiles[1].ignoreFiles.size() ==  2
-            ignoreFiles[2].ignoreFiles.size() ==  5
-            ignoreFiles[3].ignoreFiles.size() ==  1
-            ignoreFiles[4].ignoreFiles.size() ==  0
-            ignoreFiles[5].ignoreFiles.size() ==  3
+        ignoreFiles.size() == 6
+        ignoreFiles[0].ignoreFiles.size() == 18
+        ignoreFiles[1].ignoreFiles.size() ==  2
+        ignoreFiles[2].ignoreFiles.size() ==  5
+        ignoreFiles[3].ignoreFiles.size() ==  1
+        ignoreFiles[4].ignoreFiles.size() ==  0
+        ignoreFiles[5].ignoreFiles.size() ==  3
 
         cleanup: 'recovery System.properties'
-            recoveryProperties()
+        recoveryProperties()
     }
 
     def 'in mac os x case with idea only' () {
         setup: 'prepare properties'
-        useWindows()
+        useMac()
         def container = createMock(PluginContainer)
         expect(container.hasPlugin('eclipse')).andReturn(false)
         expect(container.hasPlugin('idea')).andReturn(true)
@@ -67,8 +67,98 @@ class PluginManagerSpeck extends Specification {
         ignoreFiles[1].ignoreFiles.size() ==  2
         ignoreFiles[2].ignoreFiles.size() ==  5
         ignoreFiles[3].ignoreFiles.size() ==  1
-        ignoreFiles[4].ignoreFiles.size() ==  0
-        ignoreFiles[5].ignoreFiles.size() ==  3
+        ignoreFiles[4].ignoreFiles.size() ==  4
+        ignoreFiles[5].ignoreFiles.size() ==  0
+
+        cleanup: 'recovery System.properties'
+        recoveryProperties()
+    }
+
+    def 'windows with full plugin case counts ignore files' () {
+        setup: 'prepare properties'
+        useWindows()
+        def container = createMock(PluginContainer)
+        expect(container.hasPlugin('eclipse')).andReturn(true)
+        expect(container.hasPlugin('idea')).andReturn(true)
+        expect(container.hasPlugin('java')).andReturn(true)
+        replay(container)
+
+        when: "all plugin are used"
+        def manager = new PluginManager(container: container)
+        def files = manager.loadIgnoreFiles()
+
+        then: "count ignore files"
+        files.size() == 29
+
+        cleanup: 'recovery System.properties'
+        recoveryProperties()
+    }
+
+    def 'mac os x with eclipse plugin case counts ignore files' () {
+        setup: 'prepare properties'
+        useMac()
+        def container = createMock(PluginContainer)
+        expect(container.hasPlugin('eclipse')).andReturn(true)
+        expect(container.hasPlugin('idea')).andReturn(false)
+        expect(container.hasPlugin('java')).andReturn(true)
+        replay(container)
+
+        when: "all plugin are used"
+        def manager = new PluginManager(container: container)
+        def files = manager.loadIgnoreFiles()
+
+        then: "count ignore files"
+        files.size() == 25
+
+        cleanup: 'recovery System.properties'
+        recoveryProperties()
+    }
+
+    def 'mac os x with all plugin case files detail' () {
+        setup: 'prepare properties'
+        useMac()
+        def container = createMock(PluginContainer)
+        expect(container.hasPlugin('eclipse')).andReturn(true)
+        expect(container.hasPlugin('idea')).andReturn(true)
+        expect(container.hasPlugin('java')).andReturn(true)
+        replay(container)
+
+        when: "all plugin are used"
+        def manager = new PluginManager(container: container)
+        def files = manager.loadIgnoreFiles()
+
+        then: "count ignore files"
+        '.DS_Store' in files
+        '.classpath' in files
+        'out/' in files
+        '*.class' in files
+        'build/' in files
+        !('Thumbs.db' in files)
+
+        cleanup: 'recovery System.properties'
+        recoveryProperties()
+    }
+
+    def 'windows with eclipse plugin case files detail' () {
+        setup: 'prepare properties'
+        useWindows()
+        def container = createMock(PluginContainer)
+        expect(container.hasPlugin('eclipse')).andReturn(true)
+        expect(container.hasPlugin('idea')).andReturn(false)
+        expect(container.hasPlugin('java')).andReturn(true)
+        replay(container)
+
+        when: "all plugin are used"
+        def manager = new PluginManager(container: container)
+        def files = manager.loadIgnoreFiles()
+
+        then: "count ignore files"
+        !('.DS_Store' in files)
+        'Thumbs.db' in files
+        '.classpath' in files
+        !('out/' in files)
+        '*.class' in files
+        'build/' in files
 
         cleanup: 'recovery System.properties'
         recoveryProperties()
