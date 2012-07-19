@@ -1,7 +1,5 @@
 package org.mikeneck.gradle.git;
 
-import java.util.List;
-
 /**
  * @author mike
  */

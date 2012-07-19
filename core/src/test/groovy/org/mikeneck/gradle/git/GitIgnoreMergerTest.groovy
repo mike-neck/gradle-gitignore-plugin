@@ -3,7 +3,8 @@ package org.mikeneck.gradle.git;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.List
+import org.gradle.api.plugins.PluginContainer;
 
 /**
  * @author mike
@@ -42,7 +43,7 @@ public class GitIgnoreMergerTest {
 
     class MockReader implements ExistingFileLoader {
         @Override void setFile(GitIgnoreFile file) {}
-        @Override GitIgnoreFile getFile () {}
+        @Override GitIgnoreFile getFile () {return new GitIgnoreFile(projectHome: new File('.'))}
         @Override
         List<String> readContents() {
             return ["*~", "_*", ".test"]
@@ -51,7 +52,7 @@ public class GitIgnoreMergerTest {
 
     class EmptyMockReader implements ExistingFileLoader {
         @Override void setFile(GitIgnoreFile file) {}
-        @Override GitIgnoreFile getFile () {}
+        @Override GitIgnoreFile getFile () {return new GitIgnoreFile(projectHome: new File('.'))}
         @Override
         List<String> readContents() {
             return []
@@ -63,6 +64,7 @@ public class GitIgnoreMergerTest {
         public List<String> loadIgnoreFiles() {
             return [".test", ".log"]
         }
+        @Override void setContainer(PluginContainer container) {}
     }
 
     class MockForce implements ForceIgnore {

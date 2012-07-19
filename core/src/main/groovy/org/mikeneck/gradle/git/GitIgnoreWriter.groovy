@@ -5,12 +5,19 @@ package org.mikeneck.gradle.git
  */
 class GitIgnoreWriter {
 
-    GitIgnoreFile gitIgnoreFile
+    String fileName
 
     List<String> fileList
 
     GitIgnoreWriter (GitIgnoreFile gitIgnoreFile, List<String> fileList) {
-        this.gitIgnoreFile = gitIgnoreFile
+        this.fileName = gitIgnoreFile.fileName
         this.fileList = fileList
+    }
+
+    Closure<Void> getClosure () {
+        return {
+            def file = new File(fileName)
+            file.write(fileList.join('\n'), 'UTF-8')
+        }
     }
 }
