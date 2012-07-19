@@ -18,9 +18,7 @@ import static org.junit.Assert.fail;
  */
 public class GitIgnoreReaderTest {
 
-    private GitIgnoreFile ignoreFile;
-
-    private GitIgnoreReader reader;
+    private ExistingFileLoader reader;
 
     private static String SRC_TEST_RECOURCES_TEST = "src/test/resources/test";
 
@@ -35,17 +33,16 @@ public class GitIgnoreReaderTest {
             file = SRC_TEST_RECOURCES_TEST;
         }
 
-        ignoreFile = new GitIgnoreFile();
+        GitIgnoreFile ignoreFile = new GitIgnoreFile();
         ignoreFile.setProjectHome(new File(file));
 
         reader = new GitIgnoreReader();
         reader.setFile(ignoreFile);
-        reader.load();
     }
 
     @Test
     public void readContentsProperly () {
-        Map<Integer,String> contents = reader.getContents();
+        List<String> contents = reader.readContents();
 
         assertThat(contents.size(), is(8));
     }

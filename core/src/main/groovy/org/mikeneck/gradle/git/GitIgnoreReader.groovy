@@ -3,20 +3,20 @@ package org.mikeneck.gradle.git
 /**
  * @author mike_neck
  */
-class GitIgnoreReader {
+class GitIgnoreReader implements ExistingFileLoader {
 
     GitIgnoreFile file
 
-    Map<Integer, String> contents
-
-    void load() {
-        contents = [:]
+    Map<Integer, String> load() {
+        def contents = [:]
         new File(file.fileName).eachLine {String item, int line ->
             contents[line] = item
         }
+        return contents
     }
 
-    List<String> readContents () {
-        return contents.collect {it.value}
+    @Override
+    public List<String> readContents () {
+        return load().collect {it.value}
     }
 }

@@ -9,7 +9,8 @@ import java.util.List;
  */
 abstract public class GitIgnoreMerger implements Merger {
 
-    public static SecondMerger init(final List<String> initialFiles) {
+    public static SecondMerger init(ExistingFileLoader existingFileLoader) {
+        List<String> initialFiles = existingFileLoader.readContents();
         List<String> list = new ArrayList<String>(initialFiles);
         if (list.size() > 0) {
             list.add("");
