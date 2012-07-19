@@ -15,20 +15,21 @@ class GitIgnorePlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        GitIgnoreFile ignoreFile = new GitIgnoreFile(projectHome: project.projectDir)
-        ExistingFileLoader loader = new GitIgnoreReader(file: ignoreFile)
-
-        Plugins plugins = new PluginManager(container: project.plugins)
-
         ExtensionContainer extensions = project.getExtensions()
         GitIgnore gitIgnore = extensions.create(GitIgnore.extension, GitIgnore.class)
 
-        def writer = GitIgnoreMerger
-                .init(loader)
-                .plugins(plugins)
-                .merge(gitIgnore)
+        project.task(GitIgnore.extension).doLast {
+            GitIgnoreFile ignoreFile = new GitIgnoreFile(projectHome: project.projectDir)
+            ExistingFileLoader loader = new GitIgnoreReader(file: ignoreFile)
 
-        project.task(GitIgnore.extension).doLast {writer.closure ()}
+            Plugins plugins = new PluginManager(container: project.plugins)
+
+            GitIgnoreMerger
+                    .init(loader)
+                    .plugins(plugins)
+                    .merge(gitIgnore)
+                    .closure()
+        }
     }
 
 }

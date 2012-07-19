@@ -1,6 +1,8 @@
 package org.mikeneck.gradle.git;
 
 import groovy.lang.Closure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,22 +25,22 @@ public class GitIgnore implements ForceIgnore {
 
     public static final String extension = "gitignore";
 
-    public List<String> ignoreFiles = new ArrayList<String>();
+    public List<String> files = new ArrayList<String>();
 
     public void files (String... items) {
-        ignoreFiles = Arrays.asList(items);
+        files = Arrays.asList(items);
     }
 
     public void files (List<String> items) {
-        ignoreFiles = items;
+        files = items;
     }
 
     public void files (Closure<List<String>> closure) {
-        ignoreFiles = closure.call();
+        files = closure.call();
     }
 
     @Override
     public List<String> getFiles() {
-        return Collections.unmodifiableList(ignoreFiles);
+        return Collections.unmodifiableList(files);
     }
 }

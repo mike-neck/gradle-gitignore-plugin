@@ -1,10 +1,15 @@
 buildscript {
     dependencies {
-        classpath files ("../core/build/libs/gradle-git-ignore-${project.properties['version']}.jar")
+        classpath files ("${project.properties.rootDir.path}/core/build/libs/gradle-git-ignore-${project.properties['version']}.jar")
     }
 }
 
-if (new File("../core/build/libs/gradle-git-ignore-${project.properties['version']}.jar").exists()) {
+if (new File("${project.properties.rootDir.path}/core/build/libs/gradle-git-ignore-${project.properties['version']}.jar").exists()) {
     apply plugin : 'gitignore'
+}
+
+// for testing gitignore task
+gitignore {
+    files ('*.bk', '*.tmp')
 }
 
