@@ -12,39 +12,37 @@ public class GitIgnoreMergerTest {
 
     @Test
     public void firstStage () {
-        def merge = GitIgnoreMerger
+        def writer = GitIgnoreMerger
                 .init(new MockReader())
                 .plugins(new MockPlugins())
                 .merge(new MockForce())
 
-        assert merge.size() == 8
+        assert writer.fileList.size() == 8
     }
 
     @Test
     void firstStageIsEmpty () {
-        def merge = GitIgnoreMerger
+        def writer = GitIgnoreMerger
                 .init(new EmptyMockReader())
                 .plugins(new MockPlugins())
                 .merge(new MockForce())
 
-        assert merge.size() == 6
+        assert writer.fileList.size() == 6
     }
 
     @Test
     void thirdStageEndsWithBlank () {
-        def merge = GitIgnoreMerger
+        def writer = GitIgnoreMerger
                 .init(new EmptyMockReader())
                 .plugins(new MockPlugins())
                 .merge(new MockForce2())
 
-        assert merge.size() == 5
+        assert writer.fileList.size() == 5
     }
 
     class MockReader implements ExistingFileLoader {
-        @Override
-        void setFile(GitIgnoreFile file) {
-        }
-
+        @Override void setFile(GitIgnoreFile file) {}
+        @Override GitIgnoreFile getFile () {}
         @Override
         List<String> readContents() {
             return ["*~", "_*", ".test"]
@@ -52,10 +50,8 @@ public class GitIgnoreMergerTest {
     }
 
     class EmptyMockReader implements ExistingFileLoader {
-        @Override
-        void setFile(GitIgnoreFile file) {
-        }
-
+        @Override void setFile(GitIgnoreFile file) {}
+        @Override GitIgnoreFile getFile () {}
         @Override
         List<String> readContents() {
             return []

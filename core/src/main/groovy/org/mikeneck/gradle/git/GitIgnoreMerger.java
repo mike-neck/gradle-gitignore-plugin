@@ -9,21 +9,26 @@ import java.util.List;
  */
 abstract public class GitIgnoreMerger implements Merger {
 
+    protected GitIgnoreFile gitIgnoreFile;
+
     public static SecondMerger init(ExistingFileLoader existingFileLoader) {
         List<String> initialFiles = existingFileLoader.readContents();
         List<String> list = new ArrayList<String>(initialFiles);
         if (list.size() > 0) {
             list.add("");
         }
-        return new SecondMerger(list);
+        return new SecondMerger(list, existingFileLoader);
     }
 
     private static class SecondMerger {
 
         private final List<String> files;
 
-        public SecondMerger(final List<String> initialFiles) {
+        private ExistingFileLoader existingFileLoader;
+
+        public SecondMerger(final List<String> initialFiles, ExistingFileLoader existingFileLoader) {
             files = Collections.unmodifiableList(initialFiles);
+            this.existingFileLoader = existingFileLoader;
         }
 
         public ThirdMerger plugins(Plugins plugins) {
@@ -35,7 +40,7 @@ abstract public class GitIgnoreMerger implements Merger {
                 }
             }
             list.add("");
-            return new ThirdMerger(list);
+            return new ThirdMerger(list, existingFileLoader);
         }
     }
 
@@ -43,12 +48,13 @@ abstract public class GitIgnoreMerger implements Merger {
 
         private final List<String> files;
 
-        public ThirdMerger(List<String> list) {
+        public ThirdMerger(List<String> list, ExistingFileLoader existingFileLoader) {
             files = Collections.unmodifiableList(list);
+            gitIgnoreFile = existingFileLoader.getFile();
         }
 
         @Override
-        public List<String> merge (ForceIgnore forceIgnore) {
+        public GitIgnoreWriter merge (ForceIgnore forceIgnore) {
             List<String> list = new ArrayList<String>((int) (files.size() * 1.6));
             list.addAll(files);
             for (String file : forceIgnore.getFiles()) {
@@ -57,7 +63,7 @@ abstract public class GitIgnoreMerger implements Merger {
                 }
             }
             list.add("");
-            return list;
+            return new GitIgnoreWriter(gitIgnoreFile, list);
         }
     }
 }

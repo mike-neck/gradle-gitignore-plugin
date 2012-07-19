@@ -7,5 +7,5 @@ import java.util.List;
  */
 public interface Merger {
 
-    public List<String> merge(ForceIgnore forceIgnore);
+    public GitIgnoreWriter merge(ForceIgnore forceIgnore);
 }

@@ -9,5 +9,7 @@ public interface ExistingFileLoader {
 
     public void setFile (GitIgnoreFile file);
 
+    public GitIgnoreFile getFile ();
+
     public List<String> readContents ();
 }
