@@ -9,8 +9,10 @@ class GitIgnoreReader implements ExistingFileLoader {
 
     Map<Integer, String> load() {
         def contents = [:]
-        new File(file.fileName).eachLine {String item, int line ->
-            contents[line] = item
+        if (new File(file.fileName).exists()) {
+            new File(file.fileName).eachLine {String item, int line ->
+                contents[line] = item
+            }
         }
         return contents
     }
