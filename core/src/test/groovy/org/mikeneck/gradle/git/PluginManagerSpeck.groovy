@@ -66,15 +66,19 @@ class PluginManagerSpeck extends Specification {
 
         then: "count plugins"
         ignoreFiles.size() == 6
-        ignoreFiles[0].ignoreFiles.size() ==  0
-        ignoreFiles[1].ignoreFiles.size() ==  2
-        ignoreFiles[2].ignoreFiles.size() ==  5
-        ignoreFiles[3].ignoreFiles.size() ==  1
-        ignoreFiles[4].ignoreFiles.size() ==  4
-        ignoreFiles[5].ignoreFiles.size() ==  0
+        ignoreFiles[index].ignoreFiles.size() ==  expected
 
         cleanup: 'recovery System.properties'
         recoveryProperties()
+
+        where:
+        index | expected
+        0     |  0
+        1     |  2
+        2     |  5
+        3     |  1
+        4     |  4
+        5     |  0
     }
 
     def 'windows with full plugin case counts ignore files' () {
@@ -131,11 +135,11 @@ class PluginManagerSpeck extends Specification {
         def files = manager.loadIgnoreFiles()
 
         then: "assertion files in detail"
-        '.DS_Store' in files
-        '.classpath' in files
-        'out/' in files
-        '*.class' in files
-        'build/' in files
+        '.DS_Store'   in files
+        '.classpath'  in files
+        'out/'        in files
+        '*.class'     in files
+        'build/'      in files
         !('Thumbs.db' in files)
 
         cleanup: 'recovery System.properties'
@@ -157,11 +161,11 @@ class PluginManagerSpeck extends Specification {
 
         then: "assertion files in detail"
         !('.DS_Store' in files)
-        'Thumbs.db' in files
-        '.classpath' in files
-        !('out/' in files)
-        '*.class' in files
-        'build/' in files
+        'Thumbs.db'   in files
+        '.classpath'  in files
+        !('out/'      in files)
+        '*.class'     in files
+        'build/'      in files
 
         cleanup: 'recovery System.properties'
         recoveryProperties()
