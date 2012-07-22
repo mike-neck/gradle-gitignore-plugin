@@ -35,17 +35,20 @@ class PluginManagerSpeck extends Specification {
         def manager = new PluginManager(container: container)
         def ignoreFiles = manager.manage()
 
-        then: "count plugins"
-        ignoreFiles.size() == 6
-        ignoreFiles[0].ignoreFiles.size() == 18
-        ignoreFiles[1].ignoreFiles.size() ==  2
-        ignoreFiles[2].ignoreFiles.size() ==  5
-        ignoreFiles[3].ignoreFiles.size() ==  1
-        ignoreFiles[4].ignoreFiles.size() ==  0
-        ignoreFiles[5].ignoreFiles.size() ==  3
+        then: "assert operation"
+        ignoreFiles[index].ignoreFiles.size() == expected
 
         cleanup: 'recovery System.properties'
         recoveryProperties()
+
+        where: "count plugins"
+        index | expected
+        0     | 18
+        1     |  2
+        2     |  5
+        3     |  1
+        4     |  0
+        5     |  3
     }
 
     def 'in mac os x case with idea only' () {
